@@ -1,0 +1,29 @@
+
+version: 2.1
+
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - run: npm run lint
+  test:
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - run: npm run test
+  analyse:
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - run: npm run audit
+workflows:
+  default:
+    jobs:
+      - build
+      - test:
+          require: [build]
+      - analyse:
+          requires:
+            - "test"
